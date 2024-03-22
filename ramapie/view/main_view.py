@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 # -----------------------------------------------------------------------------
 # Project: RamaPie
-# File: __init__.py
+# File: main_controller.py
 # Author: Christofanis Skordas (skordasc@uchicago.edu)
 # -----------------------------------------------------------------------------
 # Purpose:
-# This file is part of the RamaPie project. It is the main file of the package,
-# and it is used to initialize the package.
+# This file contains the main view for the RamaPie application.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +21,17 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-from ramapie.version import get_static_version
-from ramapie.controller import MainController
+from qtpy.QtWidgets import QMainWindow
 
-__all__ = ["__version__", "app"]
-__version__ = get_static_version()
 
-# Application controller
-app = MainController()
+class MainView(QMainWindow):
+    """This class is responsible for displaying the main application for RamaPie."""
+
+    def __init__(self) -> None:
+        super(MainView, self).__init__()
+
+    def display_window(self, version: str | None) -> None:
+        # Set the window title based on the version number
+        self.setWindowTitle(f"RamaPie {version}") if version else self.setWindowTitle("RamaPie")
+        # Display the window
+        self.showNormal()

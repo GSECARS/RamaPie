@@ -5,8 +5,7 @@
 # Author: Christofanis Skordas (skordasc@uchicago.edu)
 # -----------------------------------------------------------------------------
 # Purpose:
-# This file is part of the RamaPie project. It is the main file of the package,
-# and it is used to initialize the package.
+# This file main file of the view package.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +21,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-from ramapie.version import get_static_version
-from ramapie.controller import MainController
+from ramapie.view.main_view import MainView
 
-__all__ = ["__version__", "app"]
-__version__ = get_static_version()
-
-# Application controller
-app = MainController()
+__all__ = ["MainView"]

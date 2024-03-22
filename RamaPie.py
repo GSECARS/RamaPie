@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -----------------------------------------------------------------------------
 # Project: RamaPie
-# File: __init__.py
+# File: RamaPie.py
 # Author: Christofanis Skordas (skordasc@uchicago.edu)
 # -----------------------------------------------------------------------------
 # Purpose:
@@ -22,11 +22,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-from ramapie.version import get_static_version
-from ramapie.controller import MainController
+from ramapie import app, __version__
 
-__all__ = ["__version__", "app"]
-__version__ = get_static_version()
 
-# Application controller
-app = MainController()
+if __name__ == "__main__":
+    # Run the application
+    app.run(version=__version__)

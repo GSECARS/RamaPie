@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 # -----------------------------------------------------------------------------
 # Project: RamaPie
-# File: __init__.py
+# File: main_controller.py
 # Author: Christofanis Skordas (skordasc@uchicago.edu)
 # -----------------------------------------------------------------------------
 # Purpose:
-# This file is part of the RamaPie project. It is the main file of the package,
-# and it is used to initialize the package.
+# This file contains the main controller for the RamaPie application.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +21,27 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-from ramapie.version import get_static_version
-from ramapie.controller import MainController
+import sys
+from typing import Optional
 
-__all__ = ["__version__", "app"]
-__version__ = get_static_version()
+from qtpy.QtWidgets import QApplication
 
-# Application controller
-app = MainController()
+from ramapie.view import MainView
+
+
+class MainController:
+    """This class is responsible for controlling the main application for RamaPie."""
+
+    def __init__(self) -> None:
+        """This method initializes the main application for RamaPie."""
+        self._app = QApplication(sys.argv)
+        self._view = MainView()
+
+    def run(self, version: Optional[str] = "") -> None:
+        """This method is responsible for running the main application for RamaPie."""
+        # Display the view
+        self._view.display_window(version=version)
+
+        # Start the PyQt application's event loop and exit the Python script with the status code returned by the
+        # application
+        sys.exit(self._app.exec())
