@@ -24,8 +24,10 @@
 import sys
 from typing import Optional
 
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QApplication
 
+from ramapie.model import MainModel
 from ramapie.view import MainView
 
 
@@ -35,13 +37,36 @@ class MainController:
     def __init__(self) -> None:
         """This method initializes the main application for RamaPie."""
         self._app = QApplication(sys.argv)
+        self._model = MainModel()
         self._view = MainView()
+
+        # Run main controller methods
+        self._configure_main_controller()
 
     def run(self, version: Optional[str] = "") -> None:
         """This method is responsible for running the main application for RamaPie."""
         # Display the view
-        self._view.display_window(version=version)
+        self._view.display_window(
+            version=version, size=self._model.settings.display.size, position=self._model.settings.display.position, state=self._model.settings.display.state
+        )
 
         # Start the PyQt application's event loop and exit the Python script with the status code returned by the
         # application
         sys.exit(self._app.exec())
+
+    def _close_event_triggered(self) -> None:
+        """Saves the main application window size, position and state."""
+        # Save the size
+        self._model.settings.display.size = self._view.size()
+        # Save the position
+        self._model.settings.display.position = self._view.pos()
+        # Save the state (maximized or not)
+        if self._view.windowState() == Qt.WindowState.WindowMaximized:
+            self._model.settings.display.state = 4
+        else:
+            self._model.settings.display.state = 2
+
+    def _configure_main_controller(self) -> None:
+        """Basic configuration for the main controller functionality."""
+        # Connects the signal and slot for the main view settings.
+        self._view.close_event_changed.connect(self._close_event_triggered)
