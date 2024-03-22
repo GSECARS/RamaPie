@@ -39,7 +39,7 @@ class MainController:
         """This method initializes the main application for RamaPie."""
         self._app = QApplication(sys.argv)
         self._model = MainModel()
-        self._view = MainView()
+        self._view = MainView(directories=self._model.directories)
 
         # Main application thread
         self._main_worker = QtWorkerModel(self._thread_methods, ())

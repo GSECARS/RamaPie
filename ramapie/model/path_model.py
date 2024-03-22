@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 # -----------------------------------------------------------------------------
 # Project: RamaPie
-# File: main_model.py
+# File: path_model.py
 # Author: Christofanis Skordas (skordasc@uchicago.edu)
 # -----------------------------------------------------------------------------
 # Purpose:
-# This file contains the main model for the RamaPie application.
+# This file contains the PathModel class, which is responsible for the
+# paths of the RamaPie icons and style files.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,28 +23,21 @@
 # ----------------------------------------------------------------------
 
 from dataclasses import dataclass, field
-
-from ramapie.model.settings import SettingsModel
-from ramapie.model.path_model import PathModel
+from pathlib import Path, PurePosixPath
 
 
 @dataclass
-class MainModel:
-    """This class is responsible for the main model for RamaPie."""
+class PathModel:
+    """Model that holds the paths for the assets directories."""
 
-    _settings: SettingsModel = field(init=False, repr=False, compare=False)
-    _directories: PathModel = field(init=False, repr=False, compare=False)
+    _assets_path: str = field(init=False, compare=False, repr=False)
+    _icon_path: str = field(init=False, compare=False, repr=False)
 
     def __post_init__(self) -> None:
-        self._settings = SettingsModel()
-        self._directories = PathModel()
+        self._assets_path = Path("ramapie/assets").absolute().as_posix()
+        self._icon_path = PurePosixPath(self._assets_path).joinpath("icons").as_posix()
 
     @property
-    def settings(self) -> SettingsModel:
-        """This property returns the settings model instance of the main model."""
-        return self._settings
-
-    @property
-    def directories(self) -> PathModel:
-        """This property returns the directories model instance of the main model."""
-        return self._directories
+    def icon_path(self) -> str:
+        """Return the path of the icons' directory."""
+        return self._icon_path

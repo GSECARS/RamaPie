@@ -22,6 +22,7 @@
 # ----------------------------------------------------------------------
 
 from ramapie.model.qt_worker_model import QtWorkerModel
+from ramapie.model.path_model import PathModel
 from ramapie.model.main_model import MainModel
 
-__all__ = ["MainModel", "QtWorkerModel"]
+__all__ = ["MainModel", "QtWorkerModel", "PathModel"]

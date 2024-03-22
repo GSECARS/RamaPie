@@ -21,9 +21,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+from pathlib import PurePosixPath
 from qtpy.QtCore import QPoint, QSize, Qt, QEvent, Signal
-from qtpy.QtGui import QCloseEvent
+from qtpy.QtGui import QCloseEvent, QIcon
 from qtpy.QtWidgets import QMainWindow, QMessageBox
+
+from ramapie.model import PathModel
 
 
 class MainView(QMainWindow):
@@ -31,8 +34,11 @@ class MainView(QMainWindow):
 
     close_event_changed: Signal = Signal()
 
-    def __init__(self) -> None:
+    def __init__(self, directories: PathModel) -> None:
         super(MainView, self).__init__()
+
+        # Directories
+        self._directories = directories
 
         # Event helpers
         self._close_triggered: bool = False
@@ -41,6 +47,8 @@ class MainView(QMainWindow):
     def display_window(self, version: str | None, size: QSize | None, position: QPoint | None, state: int) -> None:
         # Set the window title based on the version number
         self.setWindowTitle(f"RamaPie {version}") if version else self.setWindowTitle("RamaPie")
+        # Set the window icon
+        self.setWindowIcon(QIcon(PurePosixPath(self._directories.icon_path).joinpath("RamaPie.png").as_posix()))
         # Display the window
         self.showNormal()
 
