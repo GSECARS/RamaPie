@@ -1,0 +1,50 @@
+# -----------------------------------------------------------------------------
+# Project: RamaPie
+# File: .pre-commit-config.yaml
+# Author: Christofanis Skordas (skordasc@uchicago.edu)
+# -----------------------------------------------------------------------------
+# Purpose:
+# This file is used to configure the pre-commit hooks that are used to
+# automatically check the code before it is committed to the repository.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------
+
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        language_version: python3.12
+        args: ["--config=pyproject.toml"]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies: ["Flake8-pyproject"]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+      - id: mypy
+        args: ["--config=pyproject.toml"]
+
+  - repo: local
+    hooks:
+      - id: version
+        name: Update version
+        entry: python ramapie/version.py
+        language: system
+        pass_filenames: false
