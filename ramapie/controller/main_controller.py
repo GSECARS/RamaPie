@@ -22,12 +22,13 @@
 # ----------------------------------------------------------------------
 
 import sys
+import time
 from typing import Optional
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QApplication
 
-from ramapie.model import MainModel
+from ramapie.model import MainModel, QtWorkerModel
 from ramapie.view import MainView
 
 
@@ -39,6 +40,9 @@ class MainController:
         self._app = QApplication(sys.argv)
         self._model = MainModel()
         self._view = MainView()
+
+        # Main application thread
+        self._main_worker = QtWorkerModel(self._thread_methods, ())
 
         # Run main controller methods
         self._configure_main_controller()
@@ -53,6 +57,14 @@ class MainController:
         # Start the PyQt application's event loop and exit the Python script with the status code returned by the
         # application
         sys.exit(self._app.exec())
+
+    def _thread_methods(self) -> None:
+        """Run all thread methods"""
+        while not self._view.close_triggered:
+            time.sleep(0.05)
+
+        # Set thread status to finished, so the GUI loop can end
+        self._view.threads_finished = True
 
     def _close_event_triggered(self) -> None:
         """Saves the main application window size, position and state."""
@@ -70,3 +82,5 @@ class MainController:
         """Basic configuration for the main controller functionality."""
         # Connects the signal and slot for the main view settings.
         self._view.close_event_changed.connect(self._close_event_triggered)
+        # Start the main application thread
+        self._main_worker.start()

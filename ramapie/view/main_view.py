@@ -34,6 +34,10 @@ class MainView(QMainWindow):
     def __init__(self) -> None:
         super(MainView, self).__init__()
 
+        # Event helpers
+        self._close_triggered: bool = False
+        self.threads_finished: bool = False
+
     def display_window(self, version: str | None, size: QSize | None, position: QPoint | None, state: int) -> None:
         # Set the window title based on the version number
         self.setWindowTitle(f"RamaPie {version}") if version else self.setWindowTitle("RamaPie")
@@ -77,7 +81,16 @@ class MainView(QMainWindow):
             # Emit the application close event changed signal, to update the main window settings.
             self.close_event_changed.emit()
 
+            # Make sure that all other threads are aborted before closing.
+            self._close_triggered = True
+            while not self.threads_finished:
+                continue
+
             # Close application
             event.accept()
         else:
             event.ignore()
+
+    @property
+    def close_triggered(self) -> bool:
+        return self._close_triggered
